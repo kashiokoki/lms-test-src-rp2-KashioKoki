@@ -54,7 +54,6 @@ public class Case04 {
 	@Order(2)
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
-		// TODO ここに追加
 		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
 		webDriver.findElement(By.id("password")).sendKeys("StudentAA001");
 
@@ -75,7 +74,6 @@ public class Case04 {
 	@Order(3)
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
-		// TODO ここに追加
 		//機能プルダウンクリック
 		webDriver.findElement(By.cssSelector("li.dropdown > a.dropdown-toggle")).click();
 
@@ -92,7 +90,6 @@ public class Case04 {
 	@Order(4)
 	@DisplayName("テスト04 「よくある質問」リンクからよくある質問画面を別タブに開く")
 	void test04() {
-		// TODO ここに追加
 		//現在のウィンドウ取得
 		String currentWindow = webDriver.getWindowHandle();
 
