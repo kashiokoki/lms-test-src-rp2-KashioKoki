@@ -1,6 +1,9 @@
 package jp.co.sss.lms.ct.f02_faq;
 
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.Duration;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +12,10 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * 結合テスト よくある質問機能
@@ -35,7 +42,12 @@ public class Case04 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		// TODO ここに追加
+		webDriver.get("http://localhost:8080/lms/");
+
+		assertEquals("ログイン | LMS", webDriver.getTitle());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -43,6 +55,20 @@ public class Case04 {
 	@DisplayName("テスト02 初回ログイン済みの受講生ユーザーでログイン")
 	void test02() {
 		// TODO ここに追加
+		webDriver.findElement(By.id("loginId")).sendKeys("StudentAA01");
+		webDriver.findElement(By.id("password")).sendKeys("StudentAA001");
+
+		WebElement loginButton = webDriver.findElement(By.cssSelector(".btn.btn-primary"));
+		loginButton.click();
+		//画面遷移後待機時間
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.urlToBe(
+				"http://localhost:8080/lms/course/detail"));
+
+		assertEquals("http://localhost:8080/lms/course/detail", webDriver.getCurrentUrl());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -50,6 +76,16 @@ public class Case04 {
 	@DisplayName("テスト03 上部メニューの「ヘルプ」リンクからヘルプ画面に遷移")
 	void test03() {
 		// TODO ここに追加
+		//機能プルダウンクリック
+		webDriver.findElement(By.cssSelector("li.dropdown > a.dropdown-toggle")).click();
+
+		//ヘルプボタンクリック
+		webDriver.findElement(By.linkText("ヘルプ")).click();
+
+		assertEquals("http://localhost:8080/lms/help", webDriver.getCurrentUrl());
+
+		getEvidence(new Object() {
+		});
 	}
 
 	@Test
@@ -57,6 +93,24 @@ public class Case04 {
 	@DisplayName("テスト04 「よくある質問」リンクからよくある質問画面を別タブに開く")
 	void test04() {
 		// TODO ここに追加
+		//現在のウィンドウ取得
+		String currentWindow = webDriver.getWindowHandle();
+
+		webDriver.findElement(By.linkText("よくある質問")).click();
+
+		//新しく開いたタブに切り替える
+		for (String window : webDriver.getWindowHandles()) {
+			if (!window.equals(currentWindow)) {
+				webDriver.switchTo().window(window);
+				break;
+			}
+		}
+
+		assertEquals("http://localhost:8080/lms/faq", webDriver.getCurrentUrl());
+
+		getEvidence(new Object() {
+		});
+
 	}
 
 }
