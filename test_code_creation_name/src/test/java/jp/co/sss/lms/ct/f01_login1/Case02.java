@@ -3,8 +3,6 @@ package jp.co.sss.lms.ct.f01_login1;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import jp.co.sss.lms.ct.util.WebDriverUtils;
 
 /**
  * 結合テスト ログイン機能①
@@ -42,7 +40,7 @@ public class Case02 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		webDriver.get("http://localhost:8080/lms/");
+		WebDriverUtils.goTo("http://localhost:8080/lms/");
 
 		assertEquals("ログイン | LMS", webDriver.getTitle());
 
@@ -59,12 +57,9 @@ public class Case02 {
 
 		WebElement loginButton = webDriver.findElement(By.cssSelector(".btn.btn-primary"));
 		loginButton.click();
-
 		//待ち処理
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-		wait.until(ExpectedConditions.urlContains("http://localhost:8080/lms/login"));
-
+		WebDriverUtils.visibilityTimeout(
+				By.cssSelector("span.error"), 5);
 		WebElement errorMessage = webDriver.findElement(By.cssSelector("span.error"));
 		assertEquals("* ログインに失敗しました。", errorMessage.getText());
 		assertEquals("ログイン | LMS", webDriver.getTitle());

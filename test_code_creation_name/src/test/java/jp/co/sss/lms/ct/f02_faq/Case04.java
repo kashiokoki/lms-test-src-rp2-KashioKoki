@@ -17,6 +17,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import jp.co.sss.lms.ct.util.WebDriverUtils;
+
 /**
  * 結合テスト よくある質問機能
  * ケース04
@@ -42,7 +44,7 @@ public class Case04 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		webDriver.get("http://localhost:8080/lms/");
+		WebDriverUtils.goTo("http://localhost:8080/lms/");
 
 		assertEquals("ログイン | LMS", webDriver.getTitle());
 
@@ -60,7 +62,7 @@ public class Case04 {
 		WebElement loginButton = webDriver.findElement(By.cssSelector(".btn.btn-primary"));
 		loginButton.click();
 		//画面遷移後待機時間
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		wait.until(ExpectedConditions.urlToBe(
 				"http://localhost:8080/lms/course/detail"));
 
