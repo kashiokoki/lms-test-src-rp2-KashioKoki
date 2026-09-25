@@ -116,9 +116,11 @@ public class Case06 {
 		//カテゴリ【研修関係】
 		webDriver.findElement(By.linkText("【研修関係】")).click();
 
+		//url確認
 		assertEquals("http://localhost:8080/lms/faq?frequentlyAskedQuestionCategoryId=1",
 				webDriver.getCurrentUrl());
 
+		//文言確認
 		String result = webDriver.findElement(
 				By.cssSelector("table.sortabletable")).getText();
 		assertTrue(result.contains("Q.キャンセル料・途中退校について"));
@@ -127,9 +129,11 @@ public class Case06 {
 		//カテゴリ【人材開発支援助成金】
 		webDriver.findElement(By.linkText("【人材開発支援助成金】")).click();
 
+		//url確認
 		assertEquals("http://localhost:8080/lms/faq?frequentlyAskedQuestionCategoryId=2",
 				webDriver.getCurrentUrl());
 
+		//文言確認
 		result = webDriver.findElement(
 				By.cssSelector("table.sortabletable")).getText();
 		assertTrue(result.contains("Q.セルフ・キャリアドック制度とは何か"));
@@ -139,9 +143,11 @@ public class Case06 {
 		//カテゴリ【遠隔研修】
 		webDriver.findElement(By.linkText("【遠隔研修】")).click();
 
+		//url確認
 		assertEquals("http://localhost:8080/lms/faq?frequentlyAskedQuestionCategoryId=3",
 				webDriver.getCurrentUrl());
 
+		//文言確認
 		result = webDriver.findElement(
 				By.cssSelector("table.sortabletable")).getText();
 		assertEquals("検索結果\n"

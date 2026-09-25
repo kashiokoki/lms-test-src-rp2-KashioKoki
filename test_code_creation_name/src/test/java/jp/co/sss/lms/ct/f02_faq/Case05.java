@@ -17,6 +17,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import jp.co.sss.lms.ct.util.WebDriverUtils;
+
 /**
  * 結合テスト よくある質問機能
  * ケース05
@@ -42,7 +44,7 @@ public class Case05 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		webDriver.get("http://localhost:8080/lms/");
+		WebDriverUtils.goTo("http://localhost:8080/lms/");
 
 		assertEquals("ログイン | LMS", webDriver.getTitle());
 
