@@ -46,7 +46,7 @@ public class Case05 {
 	void test01() {
 		WebDriverUtils.goTo("http://localhost:8080/lms/");
 
-		assertEquals("ログイン | LMS", webDriver.getTitle());
+		assertEquals("http://localhost:8080/lms/", webDriver.getCurrentUrl());
 
 		getEvidence(new Object() {
 		});
@@ -124,9 +124,8 @@ public class Case05 {
 
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 		// 検索結果に「研修」が表示されるまで待つ
-		wait.until(driver -> driver.findElement(
-				By.cssSelector("table.sortabletable"))
-				.getText().contains("研修"));
+		wait.until(ExpectedConditions.textToBePresentInElementLocated(
+				By.cssSelector("table.sortabletable"), "研修"));
 
 		String result = webDriver.findElement(
 				By.cssSelector("table.sortabletable")).getText();

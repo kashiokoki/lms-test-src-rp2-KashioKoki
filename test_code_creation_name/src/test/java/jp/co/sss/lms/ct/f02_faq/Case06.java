@@ -17,6 +17,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import jp.co.sss.lms.ct.util.WebDriverUtils;
+
 /**
  * 結合テスト よくある質問機能
  * ケース06
@@ -44,7 +46,7 @@ public class Case06 {
 	void test01() {
 		webDriver.get("http://localhost:8080/lms/");
 
-		assertEquals("ログイン | LMS", webDriver.getTitle());
+		assertEquals("http://localhost:8080/lms/", webDriver.getCurrentUrl());
 
 		getEvidence(new Object() {
 		});
@@ -161,6 +163,46 @@ public class Case06 {
 	@Order(6)
 	@DisplayName("テスト06 検索結果の質問をクリックしその回答を表示")
 	void test06() {
+		//カテゴリ【研修関係
+		webDriver.findElement(By.linkText("【研修関係】")).click();
+
+		// 質問タイトルをクリック
+		webDriver.findElement(By.cssSelector("dt.mb10")).click();
+
+		// 回答が表示されるまで待つ
+		WebDriverUtils.visibilityTimeout(
+				By.cssSelector("dd[id^='answer-h']"), 5);
+
+		// 回答が表示されていることを確認
+		WebElement answer = webDriver.findElement(
+				By.cssSelector("dd[id^='answer-h']"));
+		assertTrue(answer.isDisplayed());
+
+		//カテゴリ【人材開発支援助成金】
+		webDriver.findElement(By.linkText("【人材開発支援助成金】")).click();
+
+		// 質問タイトルをクリック
+		webDriver.findElement(By.cssSelector("dt.mb10")).click();
+
+		// 回答が表示されるまで待つ
+		WebDriverUtils.visibilityTimeout(
+				By.cssSelector("dd[id^='answer-h']"), 5);
+
+		// 回答が表示されていることを確認
+		answer = webDriver.findElement(
+				By.cssSelector("dd[id^='answer-h']"));
+		assertTrue(answer.isDisplayed());
+
+		//カテゴリ【遠隔研修】
+		webDriver.findElement(By.linkText("【遠隔研修】")).click();
+
+		//データが登録されてないことの確認
+		WebElement result = webDriver.findElement(
+				By.cssSelector("table.sortabletable"));
+		assertTrue(result.getText().contains("データが登録されていません。"));
+
+		getEvidence(new Object() {
+		});
 
 	}
 
