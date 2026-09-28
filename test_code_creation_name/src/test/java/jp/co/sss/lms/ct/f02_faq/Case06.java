@@ -44,7 +44,7 @@ public class Case06 {
 	@Order(1)
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() {
-		webDriver.get("http://localhost:8080/lms/");
+		WebDriverUtils.goTo("http://localhost:8080/lms/");
 
 		assertEquals("http://localhost:8080/lms/", webDriver.getCurrentUrl());
 
