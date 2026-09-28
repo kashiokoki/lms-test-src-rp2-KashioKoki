@@ -178,6 +178,9 @@ public class Case06 {
 				By.cssSelector("dd[id^='answer-h']"));
 		assertTrue(answer.isDisplayed());
 
+		getEvidence(new Object() {
+		}, "kensyu");
+
 		//カテゴリ【人材開発支援助成金】
 		webDriver.findElement(By.linkText("【人材開発支援助成金】")).click();
 
@@ -193,6 +196,9 @@ public class Case06 {
 				By.cssSelector("dd[id^='answer-h']"));
 		assertTrue(answer.isDisplayed());
 
+		getEvidence(new Object() {
+		}, "joseikin");
+
 		//カテゴリ【遠隔研修】
 		webDriver.findElement(By.linkText("【遠隔研修】")).click();
 
@@ -202,7 +208,7 @@ public class Case06 {
 		assertTrue(result.getText().contains("データが登録されていません。"));
 
 		getEvidence(new Object() {
-		});
+		}, "enkaku");
 
 	}
 
