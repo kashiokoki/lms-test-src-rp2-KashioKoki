@@ -77,76 +77,139 @@ public class Case08 {
 	@Order(3)
 	@DisplayName("テスト03 提出済の研修日の「詳細」ボタンを押下しセクション詳細画面に遷移")
 	void test03() {
-		//提出済みの研修日を探す
-		List<WebElement> rows = webDriver.findElements(By.cssSelector("table.sctionList tbody tr"));
-		for (WebElement row : rows) {
-			if (row.getText().contains("提出済み")) {
-				//提出済みの研修日の詳細をクリック
+		// 研修日の一覧を取得
+		List<WebElement> sectionRows = webDriver.findElements(By.cssSelector("table.sctionList tr"));
+		for (WebElement row : sectionRows) {
+			// 行を少しスクロールして表示
+			scrollBy("50");
+			// 行のセルを取得
+			List<WebElement> cellsElements = row.findElements(By.cssSelector("td"));
+
+			// 「提出済み」の研修日を探す
+			if (cellsElements.size() >= 3
+					&& "提出済み".equals(cellsElements.get(2).getText())) {
+				// 「詳細」ボタンを押下
 				row.findElement(By.cssSelector("input[value='詳細']")).click();
 				break;
 			}
 		}
-
+		// セクション詳細画面への遷移を待つ
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		wait.until(ExpectedConditions.urlContains("/lms/section/detail"));
-
-		//セクション詳細画面に遷移するかのテスト
-		assertTrue(webDriver.getCurrentUrl().contains("/lms/section/detail"));
+		wait.until(ExpectedConditions.urlToBe(
+				"http://localhost:8080/lms/section/detail"));
 
 		getEvidence(new Object() {
 		});
+		// セクション詳細画面に遷移したことを確認
+		assertEquals(
+				"http://localhost:8080/lms/section/detail",
+				webDriver.getCurrentUrl());
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("テスト04 「確認する」ボタンを押下しレポート登録画面に遷移")
 	void test04() {
-		//提出済み週報を確認するを押下
-		WebElement confirmButton = webDriver.findElement(
-				By.cssSelector("input[value^='提出済み'][value$='を確認する']"));
-		confirmButton.click();
-
+		// 提出済みの日報の「確認する」ボタンを押下
+		webDriver.findElement(
+				By.cssSelector("input[value='提出済み日報【デモ】を確認する']"))
+				.click();
+		// レポート登録画面への遷移を待つ
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/lms/report/regist"));
-
-		assertEquals("http://localhost:8080/lms/report/regist", webDriver.getCurrentUrl());
+		wait.until(ExpectedConditions.urlToBe(
+				"http://localhost:8080/lms/report/regist"));
 
 		getEvidence(new Object() {
 		});
+
+		// レポート登録画面に遷移したことを確認
+		assertEquals(
+				"http://localhost:8080/lms/report/regist",
+				webDriver.getCurrentUrl());
 	}
 
 	@Test
 	@Order(5)
 	@DisplayName("テスト05 報告内容を修正して「提出する」ボタンを押下しセクション詳細画面に遷移")
 	void test05() {
-		//内容を「テスト修正」と変更
-		WebElement reportContent = webDriver.findElement(By.id("content_0"));
-		reportContent.clear();
-		reportContent.sendKeys("テスト修正");
-		//提出するボタンを押下
-		webDriver.findElement(By.cssSelector("button[type='submit']")).click();
+		// 報告内容の入力欄を取得
+		WebElement reportElement = webDriver.findElement(By.className("form-control"));
 
+		reportElement.clear();
+		reportElement.sendKeys("テスト修正");
+
+		// 修正前の証跡を取得
+		getEvidence(new Object() {
+		}, "01");
+
+		// 「提出する」ボタンを押下
+		webDriver.findElement(
+				By.cssSelector("button[type='submit']")).click();
+		// セクション詳細画面への遷移を待つ
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		wait.until(ExpectedConditions.urlContains("/lms/section/detail"));
 
-		assertTrue(webDriver.getCurrentUrl().contains("/lms/section/detail"));
-
+		// 修正後の証跡を取得
 		getEvidence(new Object() {
-		});
+		}, "02");
+		// セクション詳細画面に遷移したことを確認
+		assertTrue(
+				webDriver.getCurrentUrl().contains("/lms/section/detail"));
 	}
 
 	@Test
 	@Order(6)
 	@DisplayName("テスト06 上部メニューの「ようこそ○○さん」リンクからユーザー詳細画面に遷移")
 	void test06() {
+		// ユーザー詳細画面へのリンクを押下
+		webDriver.findElement(
+				By.cssSelector("a[href='/lms/user/detail']")).click();
+		// ユーザー詳細画面への遷移を待つ
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.urlToBe(
+				"http://localhost:8080/lms/user/detail"));
 
+		getEvidence(new Object() {
+		});
+		// ユーザー詳細画面に遷移したことを確認
+		assertEquals(
+				"http://localhost:8080/lms/user/detail",
+				webDriver.getCurrentUrl());
 	}
 
 	@Test
 	@Order(7)
 	@DisplayName("テスト07 該当レポートの「詳細」ボタンを押下しレポート詳細画面で修正内容が反映される")
 	void test07() {
-		// TODO ここに追加
-	}
+		// レポート一覧を取得
+		List<WebElement> sectionRows = webDriver.findElements(By.cssSelector("table.table-hover tr"));
+		for (WebElement row : sectionRows) {
+			// 行を少しスクロールして表示
+			scrollBy("50");
+			// 行のセルを取得
+			List<WebElement> cellsElements = row.findElements(By.cssSelector("td"));
+			// データ行ではない場合はスキップ
+			if (cellsElements.size() < 5) {
+				continue;
+			}
+			// 2022年10月1日のレポートを探す
+			if ("2022年10月1日(土)".equals(
+					cellsElements.get(0).getText())) {
+				// 該当レポートの「詳細」ボタンを押下
+				row.findElement(
+						By.cssSelector("input[value='詳細']")).click();
+				break;
+			}
+		}
+		// レポート詳細画面への遷移を待つ
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.urlContains("/lms/report/detail"));
 
+		getEvidence(new Object() {
+		});
+
+		// 修正した内容が表示されていることを確認
+		assertTrue(
+				webDriver.findElement(By.cssSelector("body")).getText().contains("テスト修正"));
+	}
 }
